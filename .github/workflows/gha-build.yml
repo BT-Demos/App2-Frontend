@@ -20,19 +20,17 @@ jobs:
         uses: cloudbees-gha-cbp/register-build-artifact@main
         id: go-action
         with:
-          name: "App1-Frontend"
-          version: 3.0.0
-          url: docker.io/App1/Frontend:3.0.0
-          digest: "sha256:r6a423fe08bf5e44a7fea6c4df9c25cdf269ee113168c19722f87876677c5cb3"
+          name: "App2-Frontend"
+          version: 1.0.0
+          url: docker.io/App2/Frontend:1.0.0
+          digest: "sha256:r6a413fe08bf5e44a7fea6c4df9c25cdf269ee113168c19722f87876677c5cb3"
           type: "docker"
-          cloudbees-url: "https://api.saas-preprod.beescloud.com"
-          cloudbees-pat: ${{ secrets.CBP_PAT }}
+          cloudbees-pat: ${{ secrets.CBP_PAT_PROD }}
             
       - name: Publish evidence
         uses: cloudbees-gha-cbp/publish-evidence-item@main
         with:
-          cloudbees-url: "https://api.saas-preprod.beescloud.com"
-          cloudbees-pat: ${{ secrets.CBP_PAT }}
+          cloudbees-pat: ${{ secrets.CBP_PAT_PROD }}
           content: |-
             Build Completed and artifacts published to Cloudbees platform
 
@@ -51,14 +49,12 @@ jobs:
         with:
           test-type: GO
           folder-path: test_reports/*
-          cloudbees-url: "https://api.saas-preprod.beescloud.com"
-          cloudbees-pat: ${{ secrets.CBP_PAT }}
+          cloudbees-pat: ${{ secrets.CBP_PAT_PROD }}
           
       - name: Publish evidence
         uses: cloudbees-gha-cbp/publish-evidence-item@main
         with:
-          cloudbees-pat: ${{ secrets.CBP_PAT }}
-          cloudbees-url: "https://api.saas-preprod.beescloud.com"
+          cloudbees-pat: ${{ secrets.CBP_PAT_PROD }}
           content: |-
             Testing Completed and results published to Cloudbees platform
             Test | Results |
@@ -79,10 +75,9 @@ jobs:
         uses: cloudbees-gha-cbp/run-cloudbees-workflow@main
         id: deploy
         with :
-          cloudbees-url: "https://api.saas-preprod.beescloud.com/"
-          cloudbees-pat: ${{ secrets.CBP_PAT }}
+          cloudbees-pat: ${{ secrets.CBP_PAT_PROD }}
           workflow-file-name: "cbp-deploy.yaml"
-          workflow-inputs: '{"artifactName": "App1-Frontend","artifactVersion": "3.0.0", "environment": "qa"}'
+          workflow-inputs: '{"artifactName": "App2-Frontend","artifactVersion": "1.0.0", "environment": "qa"}'
 
       - name: Use runUrl output
         run: echo "The CloudBees run URL is ${{ steps.deploy.outputs.cbp_run_url}}"
